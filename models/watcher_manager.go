@@ -10,7 +10,7 @@ import (
 )
 
 type WatcherManager struct {
-	watchers []Watcher
+	watchers []*Watcher
 }
 
 const poolingTime = 5 * time.Second
@@ -37,7 +37,7 @@ func (m *WatcherManager) AddWatchers(urls []url.URL) {
 		if err != nil {
 			log.Println("Failed to create watcher for url:", url, "with error:", err)
 		} else {
-			m.watchers = append(m.watchers, newWatcher)
+			m.watchers = append(m.watchers, &newWatcher)
 		}
 	}
 }
@@ -47,13 +47,14 @@ func (m *WatcherManager) KillWatcher(id string) {
 	for _, watcher := range m.watchers {
 		if watcher.id == uuid.FromStringOrNil(id) {
 			// use channel to kill it
+			watcher.channel <- Message{keepAlive: false}
 		}
 	}
 }
 
 func (m *WatcherManager) PrintStatus() {
 	fmt.Println("-------------------------------------------------- Watchers --------------------------------------------------")
-	fmt.Println("ID					status		url					last modified")
+	fmt.Println("ID					status		url			last modified")
 	for _, w := range m.watchers {
 		if w.watching {
 			fmt.Println(w.id.String(), " Watching ", w.url.String(), w.lastModified)

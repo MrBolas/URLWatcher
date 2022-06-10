@@ -73,14 +73,20 @@ func main() {
 
 		// Start watchers
 		if strings.HasPrefix(text, "start") {
-
 			wM.Start()
 			continue
 		}
 
 		// kill watcher
 		if strings.HasPrefix(text, "kill") {
+			args, err := cO.SanitizeInputs(text)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
 
+			wM.KillWatcher(args[0])
+			continue
 		}
 
 		fmt.Println("Unknown command")

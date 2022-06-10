@@ -10,13 +10,17 @@ import (
 	"github.com/gofrs/uuid"
 )
 
+type Message struct {
+	keepAlive bool
+}
+
 type Watcher struct {
 	id           uuid.UUID
 	url          url.URL
 	lastModified string
 	poolingTime  time.Duration
 	watching     bool
-	// might need a channel to control exit
+	channel      chan Message
 }
 
 func NewWatcher(url url.URL, poolingTime time.Duration) (Watcher, error) {
@@ -31,6 +35,7 @@ func NewWatcher(url url.URL, poolingTime time.Duration) (Watcher, error) {
 		lastModified: "",
 		poolingTime:  poolingTime,
 		watching:     false,
+		channel:      make(chan Message),
 	}, nil
 }
 
@@ -38,15 +43,21 @@ func NewWatcher(url url.URL, poolingTime time.Duration) (Watcher, error) {
 func (w *Watcher) start() {
 
 	c := http.Client{}
+	defer func() {
+		if r := recover(); r != nil {
+			w.watching = false
+			fmt.Println("Watcher", w.id, "panicked:", r)
+			return
+		}
+	}()
 
-	// Set initial lastModified
+	// Set initial state of lastModified
 	_, err := w.wasUrlUpdated(c)
 	if err != nil {
 		log.Panicln("Watcher failed with error:", err, " for url:", w.url.String())
 	}
 
 	for {
-
 		updated, err := w.wasUrlUpdated(c)
 		if err != nil {
 			log.Panicln("Watcher failed with error:", err, " for url:", w.url.String())
@@ -57,7 +68,17 @@ func (w *Watcher) start() {
 			log.Println(w.url.String(), "was updated")
 		}
 
-		fmt.Println("Watcher", w.id, "is watching", w.url.String())
+		// listens for kill signal on watcher channel
+		select {
+		case msg := <-w.channel:
+			if !msg.keepAlive {
+				w.watching = false
+				log.Println("Watcher", w.id, "was terminated")
+				return
+			}
+		default:
+		}
+
 		time.Sleep(w.poolingTime)
 	}
 
