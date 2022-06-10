@@ -1,6 +1,13 @@
 # URLWatcher
 URL watcher built in Go
 
+## Contents     
+
+- [What is Url Watcher](#what-is-URL-Watcher) 
+- [Features](#features) 
+- [Available commands](#available-commands) 
+    - [Command Examples](#examples) 
+
 ## What is URL Watcher
 Go CLI program that allows monitorization of last modifications of an URL.
 The program will launch individual Watchers (Go routines) and periodically sends a HEAD request to the target url.
@@ -15,6 +22,18 @@ The last date where the website was changed is on the response header "last-modi
 | stop \<arg\> | Takes as an argument the id of the watcher and stops it |
 | start all   | starts all the watchers  |
 | start \<args\> | Takes as an argument the ids of the watchers and starts them |
+
+## Features
+- [x] Load Watcher from file
+- [x] Add Watcher from Watcher shell
+- [x] List created Watchers
+- [x] Start all Watchers
+    - [x] Launch each Watcher with one Go Routine
+- [x] Start Watcher by Id
+    - [x] Launch through Go Routine
+- [x] Stop Watcher by Id
+    - [x] Use channels to coordinate
+- [ ] Tests
 
 ### Examples
 #### Startup
@@ -86,3 +105,4 @@ ID                                      status          url                     
 9fe48c02-4f08-4da3-a0c6-16698777b048  Not Watching  http://www.google.com 
 -> 
 ```
+
