@@ -1,3 +1,4 @@
+![Gopher Watchers](https://raw.githubusercontent.com/egonelbre/gophers/10cc13c5e29555ec23f689dc985c157a8d4692ab/vector/superhero/gotham.svg)
 # URLWatcher
 URL watcher built in Go
 
@@ -12,17 +13,6 @@ URL watcher built in Go
 Go CLI program that allows monitorization of last modifications of an URL.
 The program will launch individual Watchers (Go routines) and periodically sends a HEAD request to the target url.
 The last date where the website was changed is on the response header "last-modified". 
-
-## Available Commands
-| Command      | Description |
-| ----------- | ----------- |
-| load \<arg\>  | Takes as an argument a path to a file with urls in each line and loads it into the url watcher       |
-| add \<args\>  | Takes as argument one or more urls and adds them to the url watcher, alternative to load        |
-| ls   | lists all the created watchers with their id, status, urls and last modified date        |
-| stop \<arg\> | Takes as an argument the id of the watcher and stops it |
-| start all   | starts all the watchers  |
-| start \<args\> | Takes as an argument the ids of the watchers and starts them |
-
 ## Features
 - [x] Load Watcher from file
 - [x] Add Watcher from Watcher shell
@@ -34,6 +24,17 @@ The last date where the website was changed is on the response header "last-modi
 - [x] Stop Watcher by Id
     - [x] Use channels to coordinate
 - [ ] Tests
+
+## Available Commands
+| Command      | Description |
+| ----------- | ----------- |
+| load \<arg\>  | Takes as an argument a path to a file with urls in each line and loads it into the url watcher       |
+| add \<args\>  | Takes as argument one or more urls and adds them to the url watcher, alternative to load        |
+| ls   | lists all the created watchers with their id, status, urls and last modified date        |
+| stop \<arg\> | Takes as an argument the id of the watcher and stops it |
+| start all   | starts all the watchers  |
+| start \<args\> | Takes as an argument the ids of the watchers and starts them |
+
 
 ### Examples
 #### Startup
