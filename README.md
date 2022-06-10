@@ -4,12 +4,32 @@ URL watcher built in Go
 
 ## Contents     
 
-- [What is Url Watcher](#what-is-URL-Watcher) 
+- [Instructions](#instructions) 
+- [What is Url Watcher](#what-is-url-watcher) 
 - [Features](#features) 
 - [Available commands](#available-commands) 
     - [Command Examples](#examples) 
 
-## What is URL Watcher
+
+## Instructions
+1. Git clone
+```
+git clone https://github.com/MrBolas/URLWatcher.git
+```
+2. Navigate to folder and install packages
+```
+go install
+```
+3. Build
+```
+go build
+```
+4. Run it
+```
+./URLWatcher
+```
+
+## What is url watcher
 Go CLI program that allows monitorization of last modifications of an URL.
 The program will launch individual Watchers (Go routines) and periodically sends a HEAD request to the target url.
 The last date where the website was changed is on the response header "last-modified". 
