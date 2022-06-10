@@ -30,6 +30,17 @@ func (m *WatcherManager) Start() {
 	}
 }
 
+func (m *WatcherManager) StartById(ids []string) {
+	for _, watcher := range m.watchers {
+		for _, id := range ids {
+			if watcher.id == uuid.FromStringOrNil(id) && !watcher.watching {
+				go watcher.start()
+				watcher.watching = true
+			}
+		}
+	}
+}
+
 // Add watcher to manager and start it right away
 func (m *WatcherManager) AddWatchers(urls []url.URL) {
 	for _, url := range urls {
@@ -42,11 +53,11 @@ func (m *WatcherManager) AddWatchers(urls []url.URL) {
 	}
 }
 
-func (m *WatcherManager) KillWatcher(id string) {
+func (m *WatcherManager) StopWatcher(id string) {
 
 	for _, watcher := range m.watchers {
 		if watcher.id == uuid.FromStringOrNil(id) {
-			// use channel to kill it
+			// use channel to stop it
 			watcher.channel <- Message{keepAlive: false}
 		}
 	}

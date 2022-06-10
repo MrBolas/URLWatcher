@@ -73,19 +73,28 @@ func main() {
 
 		// Start watchers
 		if strings.HasPrefix(text, "start") {
-			wM.Start()
+			args, err := cO.SanitizeInputs(text)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+			if args[0] == "all" {
+				wM.Start()
+			} else {
+				wM.StartById(args)
+			}
 			continue
 		}
 
-		// kill watcher
-		if strings.HasPrefix(text, "kill") {
+		// stop watcher
+		if strings.HasPrefix(text, "stop") {
 			args, err := cO.SanitizeInputs(text)
 			if err != nil {
 				fmt.Println(err)
 				continue
 			}
 
-			wM.KillWatcher(args[0])
+			wM.StopWatcher(args[0])
 			continue
 		}
 
