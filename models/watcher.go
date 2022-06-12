@@ -43,6 +43,7 @@ func NewWatcher(url url.URL, poolingTime time.Duration) (Watcher, error) {
 func (w *Watcher) start() {
 
 	c := http.Client{}
+	w.watching = true
 	defer func() {
 		if r := recover(); r != nil {
 			w.watching = false

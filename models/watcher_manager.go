@@ -13,7 +13,7 @@ type WatcherManager struct {
 	watchers []*Watcher
 }
 
-const poolingTime = 5 * time.Second
+const poolingTime = 1 * time.Second
 
 // Create new Manager to handle watchers
 func NewManager() WatcherManager {
@@ -25,7 +25,6 @@ func (m *WatcherManager) Start() {
 	for _, watcher := range m.watchers {
 		if !watcher.watching {
 			go watcher.start()
-			watcher.watching = true
 		}
 	}
 }
@@ -35,7 +34,6 @@ func (m *WatcherManager) StartById(ids []string) {
 		for _, id := range ids {
 			if watcher.id == uuid.FromStringOrNil(id) && !watcher.watching {
 				go watcher.start()
-				watcher.watching = true
 			}
 		}
 	}
