@@ -43,7 +43,7 @@ The last date where the website was changed is on the response header "last-modi
     - [x] Launch through Go Routine
 - [x] Stop Watcher by Id
     - [x] Use channels to coordinate
-- [ ] Tests
+- [x] Tests
 
 ## Available Commands
 | Command      | Description |
